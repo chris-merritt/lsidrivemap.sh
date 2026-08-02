@@ -6,7 +6,7 @@ This script displays drive information in the order they are inserted in the bay
 Install
 ----------------
 ```
-wget https://raw.githubusercontent.com/pimlie/lsidrivemap.sh/master/lsidrivemap.sh
+wget https://raw.githubusercontent.com/chris-merritt/lsidrivemap.sh/master/lsidrivemap.sh
 chmod +x lsidrivemap.sh
 sudo mv lsidrivemap.sh /usr/local/bin/
 ```
