@@ -20,7 +20,7 @@ diskMaps=(
 lsiCmd=$(command -v sas2ircu)
 
 # optional, specify location of smartctl
-#smartCmd=$(command -v smartctl)
+smartCmd=$(command -v smartctl)
 
 #######################################################################
 
@@ -28,6 +28,14 @@ while [ $# -gt 0 ]; do
   case "$1" in
     -c)
       lsiCmd="$2"
+      shift
+      ;;
+    -m)
+      smartCmd="$2"
+      shift
+      ;;
+    -o)
+      smartOpts="$2"
       shift
       ;;
     -d)
@@ -59,6 +67,8 @@ while [ $# -gt 0 ]; do
 
 option information:
   -c <path>     The path to the sas2ircu configuration utility
+  -m <path>     The path to the smartctl utility
+  -o <arg>      Arguments to pass to smartctl utility
   -d            Show the disk type
   -f            Show the firmware of the drive
   -s            Show the disk state
@@ -153,7 +163,7 @@ if (diskNum > -1) {
         value=$(basename "$(readlink "/dev/disk/by-id/wwn-0x${disk[1]}")")
         ;;
       "smart")
-        value=$($smartCmd -A "/dev/disk/by-id/wwn-0x${disk[1]}" | grep "^\s*$smartValue " | awk '{print $10}')
+        value=$($smartCmd "$smartOpts" -A "/dev/disk/by-id/wwn-0x${disk[1]}" | grep "^\s*$smartValue " | awk '{print $10}')
         ;;
     esac
     
