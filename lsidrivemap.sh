@@ -2,12 +2,18 @@
 
 # adjust the disk mapping below to your situation
 # mapping is  on controllerNumber,portNumber
-diskMap="
-1,4 1,0 0,4 0,0
-1,5 1,1 0,5 0,1
-1,6 1,2 0,6 0,2
-1,7 1,3 0,7 0,3
+diskMaps=(
 "
+0,0 0,1 0,2 0,3 0,4 0,5 0,6 0,7 2,0 2,1 2,2 2,3
+"
+"1,0 1,1 1,2 1,3
+1,4 1,5 1,6 1,7
+1,8 1,9 1,10 1,11
+1,12 1,13 1,14 1,15
+1,16 1,17 1,18 1,19
+1,20 1,21 1,22 1,23
+"
+)
 
 # you can specificy the path to sas2ircu below, otherwise
 # we expect the command to be avaiable within the path
@@ -159,18 +165,22 @@ if (diskNum > -1) {
 "
 done
 
-rows=$(echo "$diskMap" | awk 'NF > 0' | wc -l)
-columns=$(( ($(echo "$diskMap" | wc -w) + rows - 1) / rows ))
-tableLength=$(( (cellLength + 3) * columns + 1))
-line=$(printf '%'$tableLength's' | tr ' ' -)
+for diskMap in "${diskMaps[@]}"; do
+  IFS="
+"
+  rows=$(echo "$diskMap" | awk 'NF > 0' | wc -l)
+  columns=$(( ($(echo "$diskMap" | wc -w) + rows - 1) / rows ))
+  tableLength=$(( (cellLength + 3) * columns + 1))
+  line=$(printf '%'$tableLength's' | tr ' ' -)
 
-echo "$line"
-for row in $diskMap; do
-  IFS=" "
+  echo "$line"
+  for row in $diskMap; do
+    IFS=" "
 
-  for column in $row; do
-    printf '| %'"$cellLength"'s ' "${disks[$column]}"
+    for column in $row; do
+      printf '| %'"$cellLength"'s ' "${disks[$column]}"
+    done
+    echo "|"
   done
-  echo "|"
+  echo "$line"
 done
-echo "$line"
