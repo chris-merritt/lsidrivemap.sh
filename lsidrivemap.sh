@@ -125,9 +125,14 @@ BEGIN { separator="|"; diskNum = -1 }
 type = gensub(/[ \t]+/,"","g",$1);
 value = gensub(/((^[ \t]+)|([ \t]+$))/,"","g",$2);
 
-if (type=="Slot#") {
+if (value=="Enclosure services device") {
+  diskNum = -1;
+  delete disk;
+}
+else if (type=="Slot#") {
   diskNum = value;
-} else if (diskNum > -1 && (type=="" || substr(type, 0, 6)=="------")) {
+} 
+else if (diskNum > -1 && (type=="" || substr(type, 0, 6)=="------")) {
   print diskNum separator disk["GUID"] separator disk["SerialNo"] separator disk["ModelNumber"] separator disk["State"] separator disk["FirmwareRevision"];
   diskNum = -1;
   delete disk;
